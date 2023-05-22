@@ -106,6 +106,15 @@ void RTC_START_init(void){
     P2OUT |= RTC_START_PIN;
     P2DIR |= RTC_START_PIN;
 }
+
+void RTC_START(status_e status){
+    //if the status is on or off set output
+    if(status == ON){
+        P2OUT |= RTC_START_PIN;
+    }else if(status == OFF){
+        P2OUT &= ~RTC_START_PIN;
+    }    
+}    
 //********************************************************
 //********************End of File*************************
 //********************************************************
