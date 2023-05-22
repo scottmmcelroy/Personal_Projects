@@ -22,6 +22,7 @@
 //*****************/
 // Defines
 //*****************/
+#defin RTC_START 0x20 //start pin is P2.0
 //******RTC COMMANDS******
 //****ADS1247 commands
 #define RTC_WAKEUP 0x01 //exit power-down mode
