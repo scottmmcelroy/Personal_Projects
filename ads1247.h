@@ -22,7 +22,7 @@
 //*****************/
 // Defines
 //*****************/
-#define RTC_START 0x20 //start pin is P2.0
+#define RTC_START_PIN 0x20 //start pin is P2.0
 //******RTC COMMANDS******
 //****ADS1247 commands
 #define RTC_WAKEUP 0x01 //exit power-down mode
@@ -64,6 +64,7 @@ void RTC_command(usci_type_e type, uint8_t command);
 uint8_t RTC_reg_read(uint8_t reg);
 void RTC_reg_write(uint8_t reg, uint8_t data);
 void RTC_START_init(void);
+void RTC_START(status_e status);
 
 #endif /* ADS1247_H_ */
 
