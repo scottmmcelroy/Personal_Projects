@@ -102,7 +102,9 @@ void RTC_reg_write(uint8_t reg, uint8_t data){
 }
 
 void RTC_START_init(void){
-    
+    //set the direction and output for the ADS1247 START
+    P2OUT |= RTC_START_PIN;
+    P2DIR |= RTC_START_PIN;
 }
 //********************************************************
 //********************End of File*************************
