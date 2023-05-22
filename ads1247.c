@@ -41,7 +41,7 @@ void RTC_init(void){
     uint8_t data = 0;
 
     //START needs to be pulled high
-    //START HIGH
+    RTC_START(ON);
     
     //wakeup the RTC device
     RTC_command(SPIB_e, RTC_WAKEUP);
@@ -49,6 +49,8 @@ void RTC_init(void){
     RTC_command(SPIB_e, RTC_SDATAC);
     //set the data ready pin function
 
+    //set start low to wait for another expected conversation
+    RTC_START(OFF);
 }
 
 //RDATA is 24 bits output so the return needs to be redone for 24 bits
