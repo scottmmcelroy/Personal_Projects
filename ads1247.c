@@ -40,12 +40,13 @@ void RTC_init(void){
     uint8_t reg = 0;
     uint8_t data = 0;
 
+    //START needs to be pulled high
+    //START HIGH
+    
     //wakeup the RTC device
     RTC_command(SPIB_e, RTC_WAKEUP);
-    //nop just to clear the registers
-    RTC_command(SPIB_e, RTC_RESET);
-    //try to do self calibration
-    RTC_command(SPIB_e, RTC_SELFOCAL);
+    //Stop the continuous converstion data
+    RTC_command(SPIB_e, RTC_SDATAC);
     //set the data ready pin function
 
 }
