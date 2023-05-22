@@ -1,0 +1,6 @@
+"./buffer.obj"
+"./main.obj"
+"./sm_device.obj"
+"./spi_uart.obj"
+"../lnk_msp430g2553.cmd"
+-llibc.a
