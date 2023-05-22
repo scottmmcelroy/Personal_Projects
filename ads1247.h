@@ -32,8 +32,8 @@
 #define RTC_RDATA 0x13 //read data once
 #define RTC_RDATAC 0x15 //read data continuously
 #define RTC_SDATAC 0x17 //Stop reading data continuously
-#define RTC_RREG (0x2<<4) //read from register
-#define RTC_WREG (0x4<<4) //write to register
+#define RTC_RREG (0x20) //read from register
+#define RTC_WREG (0x40) //write to register
 #define RTC_SYSOCAL 0x60 //system offset calibration
 #define RTC_SYSGCAL 0x61 //system gain calibration
 #define RTC_SELFOCAL 0x62 //self calibration
