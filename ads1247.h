@@ -63,7 +63,7 @@ uint8_t RTC_temp_read(void);
 void RTC_command(usci_type_e type, uint8_t command);
 uint8_t RTC_reg_read(uint8_t reg);
 void RTC_reg_write(uint8_t reg, uint8_t data);
-void RTC_START_init();
+void RTC_START_init(void);
 
 #endif /* ADS1247_H_ */
 
