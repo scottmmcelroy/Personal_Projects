@@ -51,7 +51,7 @@
 #define SPI_INT 0B10
 //flags can be 8 different values 0b00000000
 extern uint8_t flags = 0;
-extern uint8_t uart_rcv;
+extern uint8_t uart_rcv = 0;
 //*****************/
 // Functions
 // USCI Lines
@@ -198,7 +198,7 @@ void UART_Init(usci_type_e type){
     if(type == UARTA_e){
         //setup the USCI_A0 UART interface
         UCA0CTL1 |= UCSWRST; // put the device into reset
-        UCA0CTL0 = 0; //no parity, MSB first, 8-bit, One Stop Bit, UART, Async
+        UCA0CTL0 = 0; //no parity, LSB first, 8-bit, One Stop Bit, UART, Async
         UCA0CTL1 = UCSSEL1 + UCSSEL0 + UCSWRST; //set the clock to be SMCLK = BRCLK
         //UCBRx = 104
         //UCBRSx = 0
@@ -225,12 +225,12 @@ void UART_Enable(usci_type_e type, UART_STATUS status){
     if(type == UARTA_e){
         if(status == UART_ON){
             UCA0CTL1 &= ~UCSWRST;
-            IE2 |= UCA0RXIE; //Enable USCI_A0 RX interrupt
+            UC0IE |= UCA0RXIE; //Enable USCI_A0 RX interrupt
         }
         //off
         if(status == UART_OFF){
             UCA0CTL1 |= UCSWRST;
-            IE2 &= ~UCA0RXIE; //Enable USCI_A0 RX interrupt
+            UC0IE &= ~UCA0RXIE; //Enable USCI_A0 RX interrupt
         }
     }else if(type == UARTB_e){
         //UARTB0 doesn't exist in in MSP430G2553

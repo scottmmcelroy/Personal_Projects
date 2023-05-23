@@ -69,6 +69,10 @@ void Periph_Init(void){
     SPI_Init(SPIB_e);
     //setup a UART
     UART_Init(UARTA_e);
+    //enable UART
+    UART_Enable(UARTA_e, UART_ON);
+    //enable SPI
+    SPI_Enable(SPIB_e, SPI_ON);
 };
 
 //****led***
@@ -113,6 +117,10 @@ void Program(void){
             case UART_RCV_INT:
                 //LED ON
                 LED(ON);
+                //turn off kernal flag so tx only happens once
+                flags &= ~UART_RCV_INT;
+                //send SPI data out
+                SPI_send_blocking(SPIB_e, uart_rcv);
                 break;
             default:
                 LED(OFF);

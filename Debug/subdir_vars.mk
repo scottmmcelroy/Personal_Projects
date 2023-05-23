@@ -9,36 +9,42 @@ CMD_SRCS += \
 ../lnk_msp430g2553.cmd 
 
 C_SRCS += \
+../ads1247.c \
 ../buffer.c \
 ../main.c \
 ../sm_device.c \
 ../spi_uart.c 
 
 C_DEPS += \
+./ads1247.d \
 ./buffer.d \
 ./main.d \
 ./sm_device.d \
 ./spi_uart.d 
 
 OBJS += \
+./ads1247.obj \
 ./buffer.obj \
 ./main.obj \
 ./sm_device.obj \
 ./spi_uart.obj 
 
 OBJS__QUOTED += \
+"ads1247.obj" \
 "buffer.obj" \
 "main.obj" \
 "sm_device.obj" \
 "spi_uart.obj" 
 
 C_DEPS__QUOTED += \
+"ads1247.d" \
 "buffer.d" \
 "main.d" \
 "sm_device.d" \
 "spi_uart.d" 
 
 C_SRCS__QUOTED += \
+"../ads1247.c" \
 "../buffer.c" \
 "../main.c" \
 "../sm_device.c" \

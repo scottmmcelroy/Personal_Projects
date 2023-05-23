@@ -60,6 +60,7 @@ typedef enum{
 // Global Variables
 //*****************/
 extern uint8_t flags;
+extern uint8_t uart_rcv;
 
 //*****************/
 // Functions

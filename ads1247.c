@@ -41,16 +41,16 @@ void RTC_init(void){
     uint8_t data = 0;
 
     //START needs to be pulled high
-    RTC_START(ON);
+    RTC_START(START_ON);
     
     //wakeup the RTC device
     RTC_command(SPIB_e, RTC_WAKEUP);
-    //Stop the continuous converstion data
+    //Stop the continuous conversion data
     RTC_command(SPIB_e, RTC_SDATAC);
     //set the data ready pin function
 
     //set start low to wait for another expected conversation
-    RTC_START(OFF);
+    RTC_START(START_OFF);
 }
 
 //RDATA is 24 bits output so the return needs to be redone for 24 bits
@@ -77,12 +77,12 @@ uint8_t RTC_reg_read(uint8_t reg){
     uint8_t number_of_bytes = 0;
 
     //send register
-    SPI_send_blocking(register_read);
+    SPI_send_blocking(SPIB_e, register_read);
     //send number of bytes written
-    SPI_send_blocking(number_of_bytes);
+    SPI_send_blocking(SPIB_e,number_of_bytes);
 
     //write NOPs output so that the data comes back to the MSP
-    SPI_send_blocking(RTC_NOP);
+    SPI_send_blocking(SPIB_e, RTC_NOP);
     //pull data received and return from function
     received_data = UCB0RXBUF;
     //return the data back from the function
@@ -96,11 +96,11 @@ void RTC_reg_write(uint8_t reg, uint8_t data){
     //number of bytes written is the number_of_bytes + 1
     uint8_t number_of_bytes = 0;
     //send register
-    SPI_send_blocking(register_write);
+    SPI_send_blocking(SPIB_e, register_write);
     //send number of bytes written
-    SPI_send_blocking(number_of_bytes);
+    SPI_send_blocking(SPIB_e, number_of_bytes);
     //send data
-    SPI_send_blocking(data);
+    SPI_send_blocking(SPIB_e, data);
 }
 
 void RTC_START_init(void){
@@ -111,9 +111,9 @@ void RTC_START_init(void){
 
 void RTC_START(status_e status){
     //if the status is on or off set output
-    if(status == ON){
+    if(status == START_ON){
         P2OUT |= RTC_START_PIN;
-    }else if(status == OFF){
+    }else if(status == START_OFF){
         P2OUT &= ~RTC_START_PIN;
     }    
 }    

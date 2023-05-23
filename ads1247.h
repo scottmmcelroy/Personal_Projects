@@ -23,8 +23,8 @@
 // Defines
 //*****************/
 typedef enum{
-    ON,
-    OFF
+    START_ON,
+    START_OFF
 }status_e;
   
 #define RTC_START_PIN 0x20 //start pin is P2.0
