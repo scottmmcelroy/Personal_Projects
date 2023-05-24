@@ -44,7 +44,7 @@ typedef enum{
 #define RTC_SYSGCAL 0x61 //system gain calibration
 #define RTC_SELFOCAL 0x62 //self calibration
 //***ADS1247 registers
-#define RTC_REG_BCS 0x00 //burn-out current source
+#define RTC_REG_MUX0 0x00 //burn-out current source
 #define RTC_REG_VBIAS 0x01 //voltage bias
 #define RTC_REG_MUX1 0x02 //ADC mux control register
 #define RTC_REG_SYS0 0x03 //PGA set register and sample data rate
@@ -60,6 +60,22 @@ typedef enum{
 #define RTC_REG_GPIODIR 0x0D //gpio direction reg
 #define RTC_REG_GPIODAT 0x0E //gpio data settings
 
+//data for registers
+//MUX0
+#define MUX_SP_AIN1 0x8
+#define MUX_SN_AIN2 0x2
+#define MUX0 (MUX_SP_AIN1 + MUX_SN_AIN2)
+//MUX1
+#define VREFCON 0x60
+#define MUX1 (VREFCON)
+//IDAC0
+#define IMAG 0x6
+#define IDAC0 (IMAG)
+//IDAC1
+#define I1DIR 0x0 //AIN0
+#define I2DIR 0x3 //AIN3
+#define IDAC1 (I1DIR + I2DIR)
+
 //*****************/
 // Functions
 //*****************/
@@ -67,7 +83,7 @@ void RTC_init(void);
 uint8_t RTC_temp_read(void);
 void RTC_command(usci_type_e type, uint8_t command);
 uint8_t RTC_reg_read(uint8_t reg);
-void RTC_reg_write(uint8_t reg, uint8_t data);
+void RTC_reg_write(uint8_t reg, uint8_t bytes, uint8_t data);
 void RTC_START_init(void);
 void RTC_START(status_e status);
 

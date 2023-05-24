@@ -36,10 +36,6 @@
 // The input commands
 //*****************************************
 void RTC_init(void){
-    //variables to use for init
-    uint8_t reg = 0;
-    uint8_t data = 0;
-
     //START needs to be pulled high
     RTC_START(START_ON);
     
@@ -47,7 +43,16 @@ void RTC_init(void){
     RTC_command(SPIB_e, RTC_WAKEUP);
     //Stop the continuous conversion data
     RTC_command(SPIB_e, RTC_SDATAC);
-    //set the data ready pin function
+
+    //<<<<<Register setup>>>>>>>>>>>>
+    //setup the RTC inputs for AIN1 and AIN2
+    RTC_reg_write(RTC_REG_MUX0, 1, MUX0);
+    //setup the reference source
+    RTC_reg_write(RTC_REG_MUX1, 1, MUX1);
+    //setup the IDAC outputs currents
+    RTC_reg_write(RTC_REG_IDAC0, 1, IDAC0);
+    //setup the IDAC output channels
+    RTC_reg_write(RTC_REG_IDAC1, 1, IDAC1);
 
     //set start low to wait for another expected conversation
     RTC_START(START_OFF);
@@ -90,11 +95,11 @@ uint8_t RTC_reg_read(uint8_t reg){
 }
 
 //will only write one 8-bit at a time, no multiple register writes
-void RTC_reg_write(uint8_t reg, uint8_t data){
+void RTC_reg_write(uint8_t reg, uint8_t bytes, uint8_t data){
     //the reg should be a 4 bit register
     uint8_t register_write = RTC_WREG + reg;
     //number of bytes written is the number_of_bytes + 1
-    uint8_t number_of_bytes = 0;
+    uint8_t number_of_bytes = bytes;
     //send register
     SPI_send_blocking(SPIB_e, register_write);
     //send number of bytes written

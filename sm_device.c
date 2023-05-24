@@ -110,6 +110,9 @@ void Program(void){
     //enable global interrupt
     __bis_SR_register(GIE); //enable global interrupts
 
+    //send the ADS1247 device init to setup the ADC for PT100 measurements
+    RTC_init();
+
     //kernal while loop for interrupt operation
     while(1){
         //if the flags are triggered from interrupts
