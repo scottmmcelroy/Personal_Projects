@@ -250,7 +250,7 @@ void SPI_Enable(usci_type_e type, SPI_STATUS status){
         }
         //off
         if(status == SPI_OFF){
-            UCA0CTL1 |= ~UCSWRST;
+            UCA0CTL1 |= UCSWRST;
         }
     }else if(type == SPIB_e){
         if(status == SPI_ON){
