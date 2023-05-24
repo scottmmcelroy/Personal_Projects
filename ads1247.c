@@ -73,18 +73,27 @@ void RTC_command(usci_type_e type, uint8_t command){
 }
 
 //will only read one 8-bit at a time, no multiple register read
-uint8_t RTC_reg_read(uint8_t reg){
+//currently only works for 1 byte
+uint8_t RTC_reg_read(uint8_t reg, uint8_t bytes){
+
+    uint8_t i = 0;
     //return placeholder
     uint8_t received_data = 0;
     //the reg should be a 4 bit register
     uint8_t register_read = RTC_RREG + reg;
     //number of bytes written is the number_of_bytes + 1
-    uint8_t number_of_bytes = 0;
+    uint8_t number_of_bytes = bytes;
 
     //send register
     SPI_send_blocking(SPIB_e, register_read);
     //send number of bytes written
     SPI_send_blocking(SPIB_e,number_of_bytes);
+
+    //for loop for returning  number of bytes
+    //for(i=0; i<number_of_bytes; i++){
+    //  SPI_send_blocking();
+    //  received_data = UCB0RXBUF
+    //}
 
     //write NOPs output so that the data comes back to the MSP
     SPI_send_blocking(SPIB_e, RTC_NOP);
