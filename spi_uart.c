@@ -246,19 +246,19 @@ void SPI_Enable(usci_type_e type, SPI_STATUS status){
     //turn on or off
     if(type == SPIA_e){
         if(status == SPI_ON){
-            UCA0CTL1 |= UCSWRST;
+            UCA0CTL1 &= ~UCSWRST;
         }
         //off
         if(status == SPI_OFF){
-            UCA0CTL1 &= ~UCSWRST;
+            UCA0CTL1 |= ~UCSWRST;
         }
     }else if(type == SPIB_e){
         if(status == SPI_ON){
-            UCB0CTL1 |= UCSWRST;
+            UCB0CTL1 &= ~UCSWRST;
         }
         //off
         if(status == SPI_OFF){
-            UCB0CTL1 &= ~UCSWRST;
+            UCB0CTL1 |= UCSWRST;
         }
     }
     //************
