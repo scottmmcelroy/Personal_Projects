@@ -22,7 +22,7 @@
 //*****************/
 // Defines
 //*****************/
-
+#define SPIx SPIB_e //pre-processor switch for SPI calls
 
 //*****************/
 // Functions
@@ -36,13 +36,15 @@
 // The input commands
 //*****************************************
 void RTC_init(void){
+    //initial the start pin control
+    RTC_START_init();
     //START needs to be pulled high
     RTC_START(START_ON);
     
     //wakeup the RTC device
-    RTC_command(SPIB_e, RTC_WAKEUP);
+    RTC_command(RTC_WAKEUP);
     //Stop the continuous conversion data
-    RTC_command(SPIB_e, RTC_SDATAC);
+    RTC_command(RTC_SDATAC);
 
     //<<<<<Register setup>>>>>>>>>>>>
     //setup the RTC inputs for AIN1 and AIN2
@@ -59,24 +61,41 @@ void RTC_init(void){
 }
 
 //RDATA is 24 bits output so the return needs to be redone for 24 bits
-uint8_t RTC_temp_read(void){
-    uint8_t received_data = 0;
+//in order to read the the data, the RDATA needs to be called and 24bits returned and put into a pointer that get 24bits
+//data storage location will require Malloc and 3 locations of 8 bits each
+void RTC_temp_read(uint8_t *data){
+    //local vars
+    uint8_t i = 0;
+    //need to send a START conversion command
+
     //in order to read RDATA need to be written and than read from
-    //RDATA returns a signal write
-    return received_data;
+    SPI_send_blocking(SPIx, RTC_RDATA);
+    //after command is called, NOPs are required to get data
+
+    //in order receive all 24 bits NOP needs to be called 3 times
+    for(i=0; i<3; i++){
+        SPI_send_blocking(SPIx, RTC_NOP);
+        //RDATA returns a signal write
+        *(data+i) = UCB0RXBUF;
+    }
+
+    //need conversion function for RTC to temp
+
+    //Need to stop START conversion command
+
 }
 
-void RTC_command(usci_type_e type, uint8_t command){
+void RTC_command(uint8_t command){
     //send register
     //CS needs to be on for command to be called
-    SPI_send_blocking(type, command);
+    SPI_send_blocking(SPIx, command);
 }
 
 //will only read one 8-bit at a time, no multiple register read
 //currently only works for 1 byte
 uint8_t RTC_reg_read(uint8_t reg, uint8_t bytes){
 
-    uint8_t i = 0;
+    //uint8_t i = 0;
     //return placeholder
     uint8_t received_data = 0;
     //the reg should be a 4 bit register
@@ -85,9 +104,9 @@ uint8_t RTC_reg_read(uint8_t reg, uint8_t bytes){
     uint8_t number_of_bytes = bytes;
 
     //send register
-    SPI_send_blocking(SPIB_e, register_read);
+    SPI_send_blocking(SPIx, register_read);
     //send number of bytes written
-    SPI_send_blocking(SPIB_e,number_of_bytes);
+    SPI_send_blocking(SPIx,number_of_bytes);
 
     //for loop for returning  number of bytes
     //for(i=0; i<number_of_bytes; i++){
@@ -96,7 +115,7 @@ uint8_t RTC_reg_read(uint8_t reg, uint8_t bytes){
     //}
 
     //write NOPs output so that the data comes back to the MSP
-    SPI_send_blocking(SPIB_e, RTC_NOP);
+    SPI_send_blocking(SPIx, RTC_NOP);
     //pull data received and return from function
     received_data = UCB0RXBUF;
     //return the data back from the function
@@ -110,16 +129,16 @@ void RTC_reg_write(uint8_t reg, uint8_t bytes, uint8_t data){
     //number of bytes written is the number_of_bytes + 1
     uint8_t number_of_bytes = bytes;
     //send register
-    SPI_send_blocking(SPIB_e, register_write);
+    SPI_send_blocking(SPIx, register_write);
     //send number of bytes written
-    SPI_send_blocking(SPIB_e, number_of_bytes);
+    SPI_send_blocking(SPIx, number_of_bytes);
     //send data
-    SPI_send_blocking(SPIB_e, data);
+    SPI_send_blocking(SPIx, data);
 }
 
 void RTC_START_init(void){
     //set the direction and output for the ADS1247 START
-    P2OUT |= RTC_START_PIN;
+    P2OUT &= ~RTC_START_PIN;
     P2DIR |= RTC_START_PIN;
 }
 
