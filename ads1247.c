@@ -63,11 +63,12 @@ void RTC_init(void){
 //RDATA is 24 bits output so the return needs to be redone for 24 bits
 //in order to read the the data, the RDATA needs to be called and 24bits returned and put into a pointer that get 24bits
 //data storage location will require Malloc and 3 locations of 8 bits each
+//*************1 LSB = 195.5nV
 void RTC_temp_read(uint8_t *data){
     //local vars
     uint8_t i = 0;
     //need to send a START conversion command
-
+    RTC_START(START_ON);
     //in order to read RDATA need to be written and than read from
     SPI_send_blocking(SPIx, RTC_RDATA);
     //after command is called, NOPs are required to get data
@@ -82,6 +83,7 @@ void RTC_temp_read(uint8_t *data){
     //need conversion function for RTC to temp
 
     //Need to stop START conversion command
+    RTC_START(START_OFF);
 
 }
 
