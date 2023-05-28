@@ -104,9 +104,6 @@ void Program(void){
     //initialize the buffer_table with 10 locations
     //buffer_table = buffer_init(10);
 
-    //setup storage location for RTC read data, 24 bits needed so 3x 8bits needed
-    uint8_t *rtc_data = malloc(size(uint8_t)*3);
-
 
     //enable global interrupt
     __bis_SR_register(GIE); //enable global interrupts

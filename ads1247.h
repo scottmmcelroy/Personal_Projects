@@ -80,7 +80,7 @@ typedef enum{
 // Functions
 //*****************/
 void RTC_init(void);
-void RTC_temp_read(uint8_t *data);
+uint8_t RTC_temp_read(void);
 void RTC_command(uint8_t command);
 uint8_t RTC_reg_read(uint8_t reg, uint8_t bytes);
 void RTC_reg_write(uint8_t reg, uint8_t bytes, uint8_t data);

@@ -23,7 +23,7 @@
 // Defines
 //*****************/
 #define SPIx SPIB_e //pre-processor switch for SPI calls
-
+#define ZERO_TEMP_VALUE 0x7CE15 //expected ADC output value at 0C (100Ohm)
 //*****************/
 // Functions
 //*****************/
@@ -64,9 +64,10 @@ void RTC_init(void){
 //in order to read the the data, the RDATA needs to be called and 24bits returned and put into a pointer that get 24bits
 //data storage location will require Malloc and 3 locations of 8 bits each
 //*************1 LSB = 195.5nV
-void RTC_temp_read(uint8_t *data){
+uint8_t RTC_temp_read(void){
     //local vars
-    uint8_t i = 0;
+    uint32_t temp = 0;
+    uint8_t return_val = 0;
     //need to send a START conversion command
     RTC_START(START_ON);
     //in order to read RDATA need to be written and than read from
@@ -74,17 +75,27 @@ void RTC_temp_read(uint8_t *data){
     //after command is called, NOPs are required to get data
 
     //in order receive all 24 bits NOP needs to be called 3 times
-    for(i=0; i<3; i++){
-        SPI_send_blocking(SPIx, RTC_NOP);
-        //RDATA returns a signal write
-        *(data+i) = UCB0RXBUF;
-    }
+    //************
+    SPI_send_blocking(SPIx, RTC_NOP);
+    //RDATA returns a signal write
+    temp = (UCB0RXBUF << 16); //SHIFT COUNT IS TOO LARGE
+    SPI_send_blocking(SPIx, RTC_NOP);
+    //RDATA returns a signal write
+    temp |= (UCB0RXBUF << 8);
+    SPI_send_blocking(SPIx, RTC_NOP);
+    //RDATA returns a signal write
+    temp |= (UCB0RXBUF);
+    //***********
 
     //need conversion function for RTC to temp
-
+    //((Value - Original)*195.5n)/0.385 = DegreeC value
+    // Equation should return a temperature value in C
+    return_val = ((temp - ZERO_TEMP_VALUE)*0.0000001955)/0.385;
     //Need to stop START conversion command
     RTC_START(START_OFF);
 
+    //return the value
+    return return_val;
 }
 
 void RTC_command(uint8_t command){
