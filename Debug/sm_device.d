@@ -25,6 +25,7 @@ sm_device.obj: ../spi_uart.h
 sm_device.obj: C:/ti/ccs1200/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/include/stdlib.h
 sm_device.obj: ../ads1247.h
 sm_device.obj: C:/ti/ccs1200/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/include/stdlib.h
+sm_device.obj: ../timer.h
 
 ../sm_device.c:
 
@@ -75,4 +76,6 @@ C:/ti/ccs1200/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/include/stdlib.h:
 ../ads1247.h:
 
 C:/ti/ccs1200/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/include/stdlib.h:
+
+../timer.h:
 

@@ -15,6 +15,7 @@ ORDERED_OBJS += \
 "./main.obj" \
 "./sm_device.obj" \
 "./spi_uart.obj" \
+"./timer.obj" \
 "../lnk_msp430g2553.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -158,8 +159,8 @@ SPI_COMM.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "ads1247.obj" "buffer.obj" "main.obj" "sm_device.obj" "spi_uart.obj" 
-	-$(RM) "ads1247.d" "buffer.d" "main.d" "sm_device.d" "spi_uart.d" 
+	-$(RM) "ads1247.obj" "buffer.obj" "main.obj" "sm_device.obj" "spi_uart.obj" "timer.obj" 
+	-$(RM) "ads1247.d" "buffer.d" "main.d" "sm_device.d" "spi_uart.d" "timer.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

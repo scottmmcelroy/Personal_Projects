@@ -19,16 +19,47 @@
 #include <stdbool.h>
 #include "spi_uart.h"
 #include "ads1247.h"
+#include "timer.h"
 //*****************/
 // Defines
 //*****************/
 #define LED1 0x1 //port1.0
 
 #define DATA 0xA5 //SPI data for toggling the outputs
+//*****Reflow profile (Chipquick SMD291SNL15T4)********
+#define RAMP_TO_SOAK_TIME 90 //90 seconds
+#define RAMP_TO_SOAK_TEMP 150 //150C
+#define SOAK_TIME 90 //90 seconds
+#define SOAK_TEMP 175 //175C
+#define RAMP_TO_PEAK_TIME 50 //50 seconds
+#define RAMP_TO_PEAK_TEMP 250 //250C
+#define PEAK_TIME 20 //20 seconds
+#define PEAK_TEMP 250 //250C
+#define RAMP_TO_OFF_TIME 30 //30 seconds
+#define RAMP_TO_OFF_TEMP 25 //25C
 //*******************/
 // Globals
 //*******************/
-
+//*****reflow profile**********
+//Ramp to Soak
+uint16_t ramp_to_soak_time = RAMP_TO_SOAK_TIME;
+uint16_t ramp_to_soak_temp = RAMP_TO_SOAK_TEMP;
+uint16_t current_ramp_to_soak_temp = 0;
+//Soak time
+uint16_t soak_time = SOAK_TIME;
+uint16_t soak_temp = SOAK_TEMP;
+//Ramp to peak
+uint16_t ramp_to_peak_time = RAMP_TO_PEAK_TIME;
+uint16_t ramp_to_peak_temp = RAMP_TO_PEAK_TEMP;
+uint16_t current_ramp_to_peak_temp = 0;
+//Ramp Down
+uint16_t ramp_to_off_time = RAMP_TO_OFF_TIME;
+uint16_t ramp_to_off_temp = RAMP_TO_OFF_TEMP;
+uint16_t current_ramp_to_off_temp = 0;
+//start of reflow profile
+extern bool start_trigger = false;
+//LED state
+extern bool LED_state = false;
 //*****************/
 // Functions
 //*****************/
@@ -48,6 +79,9 @@ void Device_Init(void){
 
     //setup the SMCLK = 16MHz
     //default source is DCOCLK
+    //setup ACLK for RTC input, default setup is ACLK from crystal with /1
+
+    //setup second timer clock
 
     //setup of ports for the LED
     P1OUT &= ~LED1; //set LED output to 0
@@ -63,6 +97,8 @@ void Device_Init(void){
 void Periph_Init(void){
     //setup gpio
     ///**********
+    Timer_setup();
+    Timer_clear();
     //Setup usci
     USCI_init(USCI_AB_e, UARTA_SPIB_e);
     //setup spi and uart
@@ -81,10 +117,12 @@ void LED(LED_STATUS status){
     //on
     if(status == ON){
         P1OUT |= LED1;
+        LED_state = true;
     }
     //off
     if(status == OFF){
         P1OUT &= ~LED1;
+        LED_state = false;
     }
     //return if neither
     return;
@@ -104,13 +142,15 @@ void Program(void){
     //initialize the buffer_table with 10 locations
     //buffer_table = buffer_init(10);
 
-
     //enable global interrupt
     __bis_SR_register(GIE); //enable global interrupts
 
     //send the ADS1247 device init to setup the ADC for PT100 measurements
     RTC_init();
 
+    //timer start
+    Timer_start(TIMER_ON);
+    //*******************
     //kernal while loop for interrupt operation
     while(1){
         //if the flags are triggered from interrupts
@@ -127,12 +167,19 @@ void Program(void){
                 LED(OFF);
                 break;
         }
-        //send the data transmission
-        //SPI_send_blocking(SPIB_e, DATA);
-        //send the data transmission
-        //SPI_send_blocking(SPIB_e, DATA);
+
+        //check trigger button
+        //check_button();
+
+        //if the trigger is on start program
+        if(start_trigger == true){
+            //if the start trigger is push
+            //start reflow_program()
+            continue;
+        }
     }
     //end of kernal loop
+    //**************
 }
 
 //********************************************************

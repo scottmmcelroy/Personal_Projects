@@ -78,13 +78,13 @@ uint8_t RTC_temp_read(void){
     //************
     SPI_send_blocking(SPIx, RTC_NOP);
     //RDATA returns a signal write
-    temp = (UCB0RXBUF << 16); //SHIFT COUNT IS TOO LARGE
+    temp = ((uint32_t)UCB0RXBUF << 16); //SHIFT COUNT IS TOO LARGE
     SPI_send_blocking(SPIx, RTC_NOP);
     //RDATA returns a signal write
-    temp |= (UCB0RXBUF << 8);
+    temp |= ((uint32_t)UCB0RXBUF << 8);
     SPI_send_blocking(SPIx, RTC_NOP);
     //RDATA returns a signal write
-    temp |= (UCB0RXBUF);
+    temp |= ((uint32_t)UCB0RXBUF);
     //***********
 
     //need conversion function for RTC to temp

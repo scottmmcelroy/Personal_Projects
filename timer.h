@@ -1,48 +1,39 @@
 //*******************************************************************************
 // Project: SPI_COMM
-// File: sm_device.h
-// Description: device header file for RTD controller
+// File: timer.h
+// Description: timer header file for RTD controller
 // Author: Scott McElroy
-// Date: 12-26-2022
+// Date: 5-29-2023
 // License: Not to be used without written consent directly from the author above
 //*******************************************************************************
 
-#ifndef __SM_DEVICE_H__
-#define __SM_DEVICE_H__
+#ifndef TIMER_H_
+#define TIMER_H_
 
 //*****************/
 // Includes
 //*****************/
 #include <msp430.h>
-//#include <msp430g2553.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdbool.h>
-
+#include <sm_device.h>
 //*****************/
 // Defines
 //*****************/
 typedef enum{
-    ON,
-    OFF
-}LED_STATUS;
+   TIMER_ON,
+   TIMER_OFF
+}timer_status_e;
 
-//start of reflow profile trigger
-extern bool start_trigger;
-//LED Tracker
-extern bool LED_state;
 //*****************/
 // Functions
 //*****************/
-void Device_Init(void);
-void Periph_Init(void);
-void LED(LED_STATUS status);
+void Timer_setup(void);
+void Timer_start(timer_status_e status);
+void Timer_clear(void);
+void Timer_compare(uint16_t value);
 
-//main program run
-void Program(void);
-
-
-#endif /* __SM_DEVICE_H__ */
+#endif /* TIMER_H_ */
 //********************************************************
 //********************End of File*************************
 //********************************************************
